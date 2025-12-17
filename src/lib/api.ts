@@ -20,16 +20,13 @@ export interface NotesResponse {
   totalPages?: number;
 }
 
+// Тепер fetchNotes приймає параметри
 export const fetchNotes = async ({
   page = 1,
   perPage = 12,
   search = '',
-}: {
-  page?: number;
-  perPage?: number;
-  search?: string;
 } = {}): Promise<NotesResponse> => {
-  const res = await api.get<{ notes: Note[]; totalDocs?: number; limit?: number; page?: number; totalPages?: number }>('/notes', {
+  const res = await api.get<{ notes: Note[]; totalDocs: number; limit: number; page: number; totalPages: number }>('/notes', {
     params: { page, perPage, ...(search ? { search } : {}) },
   });
 

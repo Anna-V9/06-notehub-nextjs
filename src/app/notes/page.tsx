@@ -5,11 +5,13 @@ import Link from 'next/link';
 export default async function NotesPage() {
   const queryClient = new QueryClient();
 
-  
   const notesData = await queryClient.fetchQuery<NotesResponse>({
-  queryKey: ['notes'],
-  queryFn: fetchNotes,
-});
+    queryKey: ['notes', { page: 1, perPage: 10 }], // pass your params here
+    queryFn: ({ queryKey }) => {
+      const [_key, params] = queryKey as [string, { page?: number; perPage?: number }];
+      return fetchNotes(params);
+    },
+  });
 
   return (
     <div>
