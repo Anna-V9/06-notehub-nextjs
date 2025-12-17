@@ -15,7 +15,6 @@ const NoteList: React.FC<NoteListProps> = ({ notes }) => {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteNote(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
-    onError: (error: any) => alert(error?.message || 'Failed to delete note'),
   });
 
   if (!notes.length) return <p>No notes found.</p>;
@@ -24,23 +23,11 @@ const NoteList: React.FC<NoteListProps> = ({ notes }) => {
     <ul className={styles.list}>
       {notes.map((note) => (
         <li key={note.id} className={styles.listItem}>
-          <h2 className={styles.title}>{note.title}</h2>
-          <p className={styles.content}>{note.content}</p>
-
-          <div className={styles.footer}>
-            <span className={styles.tag}>{note.tag}</span>
-
-            <Link href={`/notes/${note.id}`} className={styles.detailsLink}>
-              View details
-            </Link>
-
-            <button
-              className={styles.button}
-              onClick={() => deleteMutation.mutate(note.id)}
-            >
-              Delete
-            </button>
-          </div>
+          <h2>{note.title}</h2>
+          <p>{note.content}</p>
+          <span>{note.tag}</span>
+          <Link href={`/notes/${note.id}`}>View details</Link>
+          <button onClick={() => deleteMutation.mutate(note.id)}>Delete</button>
         </li>
       ))}
     </ul>

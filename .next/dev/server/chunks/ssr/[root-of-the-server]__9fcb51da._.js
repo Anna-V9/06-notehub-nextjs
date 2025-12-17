@@ -113,10 +113,22 @@ const api = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axio
         'Content-Type': 'application/json'
     }
 });
-const fetchNotes = async ()=>{
-    const res = await api.get('/notes');
+const fetchNotes = async ({ page = 1, perPage = 12, search = '' } = {})=>{
+    const res = await api.get('/notes', {
+        params: {
+            page,
+            perPage,
+            ...search ? {
+                search
+            } : {}
+        }
+    });
     return {
-        docs: res.data.notes
+        docs: res.data.notes,
+        totalDocs: res.data.totalDocs,
+        limit: res.data.limit,
+        page: res.data.page,
+        totalPages: res.data.totalPages
     };
 };
 const fetchNoteById = async (id)=>{

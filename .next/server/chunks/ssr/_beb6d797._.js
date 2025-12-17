@@ -1,0 +1,3 @@
+module.exports=[50645,a=>{a.n(a.i(27572))},23576,a=>{a.n(a.i(4858))},25210,a=>{a.n(a.i(2747))},43619,a=>{a.n(a.i(79962))},13718,a=>{a.n(a.i(85523))},18198,a=>{a.n(a.i(45518))},62212,a=>{a.n(a.i(66114))},93751,a=>{"use strict";var b=a.i(7997),c=a.i(60751),d=a.i(93926),e=a.i(95936);async function f(){let a=new c.QueryClient,f=await a.fetchQuery({queryKey:["notes"],queryFn:d.fetchNotes});return(0,b.jsxs)("div",{children:[(0,b.jsx)("h1",{children:"All Notes"}),(0,b.jsx)("ul",{children:f.docs.map(a=>(0,b.jsx)("li",{children:(0,b.jsx)(e.default,{href:`/notes/${a.id}`,children:a.title})},a.id))})]})}a.s(["default",()=>f])}];
+
+//# sourceMappingURL=_beb6d797._.js.map
