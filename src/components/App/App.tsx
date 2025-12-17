@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, QueryFunctionContext  } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
+
 
 import SearchBox from '../SearchBox/SearchBox';
 import NoteList from '../NoteList/NoteList';
@@ -29,18 +30,18 @@ const AppContent: React.FC = () => {
   useEffect(() => () => debouncedSetSearch.cancel(), [debouncedSetSearch]);
 
   const { data, isLoading, isError } = useQuery<
-    NotesResponse,
-    Error,
-    NotesResponse,
-    [string, { page: number; perPage: number; search: string }]
-  >({
-    queryKey: ['notes', { page, perPage, search }],
-    queryFn: ({ queryKey }) => {
-      const [_key, params] = queryKey;
-      return fetchNotes(params);
-    },
-    placeholderData: (prev) => prev,
-  });
+  NotesResponse,
+  Error,
+  NotesResponse,
+  [string, { page: number; perPage: number; search: string }]
+>({
+  queryKey: ['notes', { page, perPage, search }],
+  queryFn: (context: QueryFunctionContext<[string, { page: number; perPage: number; search: string }]>) => {
+    const [_key, params] = context.queryKey;
+    return fetchNotes(params);
+  },
+  placeholderData: (prev: NotesResponse | undefined) => prev,
+});
 
   const notes = data?.docs ?? [];
   const totalPages = data?.totalPages ?? 1;
