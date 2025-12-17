@@ -28,13 +28,18 @@ const AppContent: React.FC = () => {
 
   useEffect(() => () => debouncedSetSearch.cancel(), [debouncedSetSearch]);
 
-  const { data, isLoading, isError } = useQuery<NotesResponse, Error>({
+  const { data, isLoading, isError } = useQuery<
+    NotesResponse,
+    Error,
+    NotesResponse,
+    [string, { page: number; perPage: number; search: string }]
+  >({
     queryKey: ['notes', { page, perPage, search }],
     queryFn: ({ queryKey }) => {
-      const [_key, params] = queryKey as [string, { page: number; perPage: number; search: string }];
+      const [_key, params] = queryKey;
       return fetchNotes(params);
     },
-    placeholderData: (prev: NotesResponse | undefined) => prev,
+    placeholderData: (prev) => prev,
   });
 
   const notes = data?.docs ?? [];
