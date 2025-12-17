@@ -20,7 +20,7 @@ export interface NotesResponse {
   totalPages?: number;
 }
 
-// Тепер fetchNotes приймає параметри
+
 export const fetchNotes = async ({
   page = 1,
   perPage = 12,

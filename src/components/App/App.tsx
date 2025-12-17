@@ -1,4 +1,4 @@
-'use client';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
@@ -27,9 +27,12 @@ const AppContent: React.FC = () => {
   useEffect(() => () => debouncedSetSearch.cancel(), [debouncedSetSearch]);
 
   const { data, isLoading, isError } = useQuery<NotesResponse>({
-    queryKey: ['notes', { page, perPage, search }],
-    queryFn: () => fetchNotes({ page, perPage, search }),
-  });
+  queryKey: ['notes', { page, perPage, search }],
+  queryFn: ({ queryKey }) => {
+    const [_key, params] = queryKey as [string, { page: number; perPage: number; search: string }];
+    return fetchNotes(params);
+  },
+});
 
   const notes = data?.docs ?? [];
   const totalPages = data?.totalPages ?? 1;
