@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
@@ -19,20 +18,24 @@ const AppContent: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const debouncedSetSearch = useMemo(() => debounce((value: string) => {
-    setPage(1);
-    setSearch(value);
-  }, 500), []);
+  const debouncedSetSearch = useMemo(
+    () => debounce((value: string) => {
+      setPage(1);
+      setSearch(value);
+    }, 500),
+    []
+  );
 
   useEffect(() => () => debouncedSetSearch.cancel(), [debouncedSetSearch]);
 
-  const { data, isLoading, isError } = useQuery<NotesResponse>({
-  queryKey: ['notes', { page, perPage, search }],
-  queryFn: ({ queryKey }) => {
-    const [_key, params] = queryKey as [string, { page: number; perPage: number; search: string }];
-    return fetchNotes(params);
-  },
-});
+  const { data, isLoading, isError } = useQuery<NotesResponse, Error>({
+    queryKey: ['notes', { page, perPage, search }],
+    queryFn: ({ queryKey }) => {
+      const [_key, params] = queryKey as [string, { page: number; perPage: number; search: string }];
+      return fetchNotes(params);
+    },
+    placeholderData: (prev: NotesResponse | undefined) => prev,
+  });
 
   const notes = data?.docs ?? [];
   const totalPages = data?.totalPages ?? 1;
