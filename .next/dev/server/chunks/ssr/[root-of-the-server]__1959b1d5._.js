@@ -107,15 +107,9 @@ const api = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axio
         'Content-Type': 'application/json'
     }
 });
-const fetchNotes = async ({ page = 1, perPage = 12, search = '' } = {})=>{
+const fetchNotes = async (params)=>{
     const res = await api.get('/notes', {
-        params: {
-            page,
-            perPage,
-            ...search ? {
-                search
-            } : {}
-        }
+        params
     });
     return {
         docs: res.data.notes,

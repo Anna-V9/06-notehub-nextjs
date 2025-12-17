@@ -19,15 +19,17 @@ export interface NotesResponse {
   page?: number;
   totalPages?: number;
 }
+export interface FetchNotesParams {
+  page: number;
+  perPage: number;
+  search?: string;
+}
 
-
-export const fetchNotes = async ({
-  page = 1,
-  perPage = 12,
-  search = '',
-} = {}): Promise<NotesResponse> => {
-  const res = await api.get<{ notes: Note[]; totalDocs: number; limit: number; page: number; totalPages: number }>('/notes', {
-    params: { page, perPage, ...(search ? { search } : {}) },
+export const fetchNotes = async (
+  params: FetchNotesParams
+): Promise<NotesResponse> => {
+  const res = await api.get('/notes', {
+    params,
   });
 
   return {

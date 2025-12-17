@@ -36,10 +36,10 @@ const AppContent: React.FC = () => {
   [string, { page: number; perPage: number; search: string }]
 >({
   queryKey: ['notes', { page, perPage, search }],
-  queryFn: (context: QueryFunctionContext<[string, { page: number; perPage: number; search: string }]>) => {
-    const [_key, params] = context.queryKey;
-    return fetchNotes(params);
-  },
+  queryFn: ({ queryKey }) => {
+  const [, params] = queryKey;
+  return fetchNotes(params);
+},
   placeholderData: (prev: NotesResponse | undefined) => prev,
 });
 
