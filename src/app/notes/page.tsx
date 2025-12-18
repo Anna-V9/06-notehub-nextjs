@@ -1,30 +1,33 @@
-import { QueryClient } from '@tanstack/react-query';
-import { fetchNotes } from '../../lib/api';
 import Link from 'next/link';
+import { fetchNotes } from '../../lib/api';
+
+
+export const dynamic = 'force-dynamic';
 
 export default async function NotesPage() {
-  const queryClient = new QueryClient();
-
-  const notesData = await queryClient.fetchQuery({
-    queryKey: ['notes', 1],
-    queryFn: () =>
-      fetchNotes({
-        page: 1,
-        perPage: 10,
-        search: '',
-      }),
+  const notesData = await fetchNotes({
+    page: 1,
+    perPage: 10,
+    search: '',
   });
 
   return (
-    <div>
+    <section>
       <h1>All Notes</h1>
-      <ul>
-        {notesData.docs.map(note => (
-          <li key={note.id}>
-            <Link href={`/notes/${note.id}`}>{note.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+
+      {notesData.docs.length === 0 ? (
+        <p>No notes found</p>
+      ) : (
+        <ul>
+          {notesData.docs.map(note => (
+            <li key={note.id}>
+              <Link href={`/notes/${note.id}`}>
+                {note.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
