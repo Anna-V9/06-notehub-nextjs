@@ -1,35 +1,33 @@
 'use client';
 
-import { useQuery, QueryClient, hydrate } from '@tanstack/react-query';
-import type { DehydratedState } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '../../../lib/api';
 import type { Note } from '../../../types/note';
+import css from './NoteDetails.module.css';
 
 interface Props {
   noteId: string;
-  dehydratedState: DehydratedState;
 }
 
-export default function NoteDetailsClient({ noteId, dehydratedState }: Props) {
-  const queryClient = new QueryClient();
-
-  
-  hydrate(queryClient, dehydratedState);
-
+export default function NoteDetailsClient({ noteId }: Props) {
   const { data: note, isLoading, error } = useQuery<Note>({
     queryKey: ['note', noteId],
     queryFn: () => fetchNoteById(noteId),
-    initialData: () => queryClient.getQueryData(['note', noteId]),
+    enabled: Boolean(noteId), 
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error || !note) return <p>Error loading note</p>;
+  if (isLoading) return <p>Loading, please wait...</p>;
+  if (error || !note) return <p>Something went wrong.</p>;
 
   return (
-    <article>
-      <h1>{note.title}</h1>
-      <p>{note.content}</p>
-      {note.tag && <span>Tag: {note.tag}</span>}
-    </article>
+    <div className={css.container}>
+      <div className={css.item}>
+        <div className={css.header}>
+          <h2>{note.title}</h2>
+        </div>
+        <p className={css.content}>{note.content}</p>
+        <p className={css.date}>{note.createdAt}</p>
+      </div>
+    </div>
   );
 }
