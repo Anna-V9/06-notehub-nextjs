@@ -31,7 +31,7 @@
     "src",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "components", "types", "app/layout.tsx", "app/error.tsx", "app/page.tsx", "app/loading.tsx", "app/notes/NotesClient.tsx", "app/notes/page.tsx", "app/notes/[id]/NoteDetails.client.tsx", "app/notes/[id]/page.tsx"  ],
   "exclude": [
     "node_modules"
   ]

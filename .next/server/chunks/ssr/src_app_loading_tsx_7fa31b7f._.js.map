@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../src/app/loading.tsx"],"sourcesContent":["export default function Loading() {\r\n  return <p>Loading, please wait...</p>;\r\n}"],"names":[],"mappings":"sDAAe,SAAS,IACtB,MAAO,CAAA,EAAA,EAAA,GAAA,EAAC,IAAA,UAAE,2BACZ"}
