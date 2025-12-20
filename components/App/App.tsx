@@ -43,7 +43,7 @@ const AppContent: React.FC = () => {
   placeholderData: (prev: NotesResponse | undefined) => prev,
 });
 
-  const notes = data?.docs ?? [];
+  const notes = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 1;
 
   return (
