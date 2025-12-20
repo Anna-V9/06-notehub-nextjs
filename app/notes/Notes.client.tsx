@@ -1,63 +1,36 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import debounce from 'lodash.debounce';
-
-import { fetchNotes, type NotesResponse } from '../../lib/api';
-import NoteList from '../../components/NoteList/NoteList';
-import Pagination from '../../components/Pagination/Pagination';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import Modal from '../../components/Modal/Modal';
-import NoteForm from '../../components/NoteForm/NoteForm';
-import css from './notes.module.css';
+import { fetchNotes } from '../../lib/api';
 
 export default function NotesClient() {
-  const [page, setPage] = useState(1);
-  const [perPage] = useState(12);
-  const [search, setSearch] = useState('');
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const debouncedSetSearch = useMemo(
-    () =>
-      debounce((value: string) => {
-        setPage(1);
-        setSearch(value);
-      }, 500),
-    []
-  );
-
-  useEffect(() => () => debouncedSetSearch.cancel(), [debouncedSetSearch]);
-
-  const { data, isLoading, error } = useQuery<NotesResponse>({
-    queryKey: ['notes', { page, perPage, search }],
-    queryFn: () => fetchNotes({ page, perPage, search })
+  const { data, isLoading } = useQuery({
+    queryKey: ['notes', { page: 1, perPage: 10, search: '' }],
+    queryFn: () =>
+      fetchNotes({
+        page: 1,
+        perPage: 10,
+        search: '',
+      }),
   });
 
-  const notes = data?.docs ?? [];
-  const totalPages = data?.totalPages ?? 1;
+  if (isLoading) return <p>Loading...</p>;
+  if (!data || data.notes.length === 0) return <p>No notes found</p>;
 
   return (
-    <div className={css.container}>
-      <header className={css.toolbar}>
-        <SearchBox onSearch={debouncedSetSearch} />
-        <Pagination page={page} onPageChange={setPage} totalPages={totalPages} />
-        <button className={css.createButton} onClick={() => setModalOpen(true)}>
-          Create note +
-        </button>
-      </header>
+    <section>
+      <h1>All Notes</h1>
 
-      <main className={css.notesGrid}>
-        {isLoading && <p>Loading, please wait...</p>}
-        {error && <p>Something went wrong.</p>}
-        {!isLoading && !error && <NoteList notes={notes} />}
-      </main>
-
-      {isModalOpen && (
-        <Modal onClose={() => setModalOpen(false)}>
-          <NoteForm onSuccess={() => setModalOpen(false)} onCancel={() => setModalOpen(false)} />
-        </Modal>
-      )}
-    </div>
+      <ul>
+        {data.notes.map(note => (
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>
+              {note.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

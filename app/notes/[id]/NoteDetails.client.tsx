@@ -10,10 +10,15 @@ interface Props {
 }
 
 export default function NoteDetailsClient({ noteId }: Props) {
-  const { data: note, isLoading, error } = useQuery<Note>({
+  const {
+    data: note,
+    isLoading,
+    error,
+  } = useQuery<Note>({
     queryKey: ['note', noteId],
     queryFn: () => fetchNoteById(noteId),
-    enabled: Boolean(noteId), 
+    enabled: Boolean(noteId),
+    refetchOnMount: false, // 👈 ключове виправлення
   });
 
   if (isLoading) return <p>Loading, please wait...</p>;

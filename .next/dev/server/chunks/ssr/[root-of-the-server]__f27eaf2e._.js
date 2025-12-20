@@ -111,13 +111,7 @@ const fetchNotes = async (params)=>{
     const res = await api.get('/notes', {
         params
     });
-    return {
-        docs: res.data.notes,
-        totalDocs: res.data.totalDocs,
-        limit: res.data.limit,
-        page: res.data.page,
-        totalPages: res.data.totalPages
-    };
+    return res.data;
 };
 const fetchNoteById = async (id)=>{
     const res = await api.get(`/notes/${id}`);
@@ -128,7 +122,8 @@ const createNote = async (payload)=>{
     return res.data;
 };
 const deleteNote = async (id)=>{
-    await api.delete(`/notes/${id}`);
+    const res = await api.delete(`/notes/${id}`);
+    return res.data;
 };
 }),
 "[project]/app/notes/[id]/NoteDetails.module.css [app-ssr] (css module)", ((__turbopack_context__) => {
@@ -163,20 +158,21 @@ function NoteDetailsClient({ noteId }) {
             noteId
         ],
         queryFn: ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["fetchNoteById"])(noteId),
-        enabled: Boolean(noteId)
+        enabled: Boolean(noteId),
+        refetchOnMount: false
     });
     if (isLoading) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
         children: "Loading, please wait..."
     }, void 0, false, {
         fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-        lineNumber: 19,
+        lineNumber: 24,
         columnNumber: 25
     }, this);
     if (error || !note) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
         children: "Something went wrong."
     }, void 0, false, {
         fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-        lineNumber: 20,
+        lineNumber: 25,
         columnNumber: 30
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -190,12 +186,12 @@ function NoteDetailsClient({ noteId }) {
                         children: note.title
                     }, void 0, false, {
                         fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-                        lineNumber: 26,
+                        lineNumber: 31,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-                    lineNumber: 25,
+                    lineNumber: 30,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -203,7 +199,7 @@ function NoteDetailsClient({ noteId }) {
                     children: note.content
                 }, void 0, false, {
                     fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-                    lineNumber: 28,
+                    lineNumber: 33,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -211,18 +207,18 @@ function NoteDetailsClient({ noteId }) {
                     children: note.createdAt
                 }, void 0, false, {
                     fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-                    lineNumber: 29,
+                    lineNumber: 34,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-            lineNumber: 24,
+            lineNumber: 29,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/notes/[id]/NoteDetails.client.tsx",
-        lineNumber: 23,
+        lineNumber: 28,
         columnNumber: 5
     }, this);
 }

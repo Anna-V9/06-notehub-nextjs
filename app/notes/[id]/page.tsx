@@ -1,4 +1,8 @@
-import { QueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  dehydrate,
+  HydrationBoundary,
+} from '@tanstack/react-query';
 import { fetchNoteById } from '../../../lib/api';
 import NoteDetailsClient from './NoteDetails.client';
 
@@ -6,9 +10,8 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function NoteDetailsPage(props: PageProps) {
-  
-  const { id } = await props.params;
+export default async function NoteDetailsPage({ params }: PageProps) {
+  const { id } = await params;
 
   if (!id) {
     throw new Error('Note id is missing');
@@ -21,5 +24,9 @@ export default async function NoteDetailsPage(props: PageProps) {
     queryFn: () => fetchNoteById(id),
   });
 
-  return <NoteDetailsClient noteId={id} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NoteDetailsClient noteId={id} />
+    </HydrationBoundary>
+  );
 }

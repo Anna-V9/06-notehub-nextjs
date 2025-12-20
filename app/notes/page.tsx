@@ -1,33 +1,25 @@
-import Link from 'next/link';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { fetchNotes } from '../../lib/api';
-
+import NotesClient from './Notes.client';
 
 export const dynamic = 'force-dynamic';
 
 export default async function NotesPage() {
-  const notesData = await fetchNotes({
-    page: 1,
-    perPage: 10,
-    search: '',
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['notes', { page: 1, perPage: 10, search: '' }],
+    queryFn: () =>
+      fetchNotes({
+        page: 1,
+        perPage: 10,
+        search: '',
+      }),
   });
 
   return (
-    <section>
-      <h1>All Notes</h1>
-
-      {notesData.docs.length === 0 ? (
-        <p>No notes found</p>
-      ) : (
-        <ul>
-          {notesData.docs.map(note => (
-            <li key={note.id}>
-              <Link href={`/notes/${note.id}`}>
-                {note.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesClient />
+    </HydrationBoundary>
   );
 }
